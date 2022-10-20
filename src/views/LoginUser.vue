@@ -1,7 +1,7 @@
 <template>
   <v-card width="800" class="mx-auto mt-5">
     <v-card-title>
-      <h1>Login</h1>
+      <h1>점주 로그인</h1>
     </v-card-title>
     <v-card-text>
       <v-form ref="form" lazy-validation>
@@ -9,7 +9,7 @@
             v-model="email"
             :rules="[v => /.+@.+\..+/.test(v) || 'E-mail must be valid', v => !!v || '이메일은 필수 값입니다']"
             label="이메일"
-            prepend-icon="mdi-account-circle"
+            prepend-icon="mdi-account-box"
             v-on:keydown.enter="login"
         ></v-text-field>
         <v-text-field
@@ -25,9 +25,9 @@
     </v-card-text>
     <v-divider></v-divider>
     <v-card-actions>
-      <v-btn color="success" v-on:click="links('/register')">Register</v-btn>
+      <v-btn color="grey" v-on:click="links('/register')">Register</v-btn>
       <v-spacer></v-spacer>
-      <v-btn color="info"
+      <v-btn color="light-green"
              v-on:click="login"
       >
         Login
@@ -67,7 +67,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

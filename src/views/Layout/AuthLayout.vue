@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app>Take IT! - 점주 페이지</v-app-bar>
+    <v-app-bar app>Take IT! - 점주 사이트</v-app-bar>
 
     <v-main>
       <v-container fluid>
