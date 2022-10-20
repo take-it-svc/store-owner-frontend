@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: owner-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: owner-frontend
+  template:
+    metadata:
+      labels:
+        app: owner-frontend
+    spec:
+      containers:
+      - image: chungjm0711/take-it-owner-frontend:1.0
+        name: take-it-owner-frontend-amd64
+        ports:
+        - containerPort: 80
+        command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
