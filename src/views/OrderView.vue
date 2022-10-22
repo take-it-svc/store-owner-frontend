@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import OrderApi from '../api/order.js';
+import OrderApi from '../api/orderApi.js';
 
 import OrderCard from '../components/OrderCard.vue'
 import DatePicker from "@/components/DatePicker";

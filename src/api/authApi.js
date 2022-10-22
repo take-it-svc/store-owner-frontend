@@ -10,7 +10,7 @@ export default {
       }
     }
 
-    const res = await axios.get(process.env.VUE_APP_USER_AUTH_URL + "/reissue", config);
+    const res = await axios.get("/user-service/auth/reissue", config);
 
     const accessToken = res.data.data.accessToken;
     jwt.saveToken(accessToken);
@@ -22,7 +22,7 @@ export default {
   requestCheckAccessToken() {
     axios.defaults.headers.common['Authorization'] =  "Bearer " + jwt.getToken();
 
-    return axios.get( process.env.VUE_APP_USER_AUTH_URL +"/check/access-token");
+    return axios.get( "/user-service/auth/check/access-token");
   },
   async logout() {
     const config = {
@@ -31,12 +31,12 @@ export default {
       }
     }
     try {
-      const response = await axios.post(process.env.VUE_APP_USER_AUTH_URL + "/logout", null, config);
-      if (response.data.code == 'SUCCESS') {
-        jwt.destroyAll();
+      const response = await axios.post("/user-service/auth/logout", null, config);
+      if (response.data.code === 'SUCCESS') {
+        jwt.removeAll();
         await router.push("/login");
       }  else {
-        alert("로그아웃 실패");
+        alert("로그아웃 실패하였습니다");
       }
     } catch (error) {
       console.log("[logout]", error);

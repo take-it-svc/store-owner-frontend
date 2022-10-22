@@ -9,7 +9,7 @@
             :orderId="this.id"
         ></order-detail-dialog>
       </v-toolbar>
-      <v-card-title v-if="itemNames.length == 1">
+      <v-card-title v-if="itemNames.length === 1">
         {{ itemNames[0] }}
       </v-card-title>
       <v-card-title v-if="itemNames.length > 1">
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import orderApi from "../api/order";
+import orderApi from "../api/orderApi";
 import OrderDetailDialog from "@/components/OrderDetailDialog";
 
 export default {
@@ -143,7 +143,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

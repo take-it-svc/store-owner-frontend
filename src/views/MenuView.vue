@@ -71,7 +71,7 @@ import {
 
 } from '@mdi/js'
 import MenuItem from "@/components/MenuItem";
-import store from "@/api/store";
+import store from "@/api/storeApi";
 
 export default {
   name: "Menu",

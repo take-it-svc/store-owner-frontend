@@ -56,7 +56,7 @@
 
 <script>
 import draggable from 'vuedraggable'
-import storeApi from "@/api/store";
+import storeApi from "@/api/storeApi";
 import {
   mdiContentSave, mdiDelete,
   mdiPlus,

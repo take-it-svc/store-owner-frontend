@@ -17,7 +17,7 @@ export default {
       longitude: store.longitude,
     }
 
-    return axios.post(process.env.VUE_APP_USER_URL + "/api/owner/store-owner", param);
+    return axios.post("/user-service/api/owner/store-owner", param);
   },
 
   async requestLoginUser(email, password) {
@@ -27,13 +27,13 @@ export default {
     }
 
     try {
-      const response = await axios.post( process.env.VUE_APP_USER_URL +"/login", user);
+      const response = await axios.post("/user-service/login", user);
       const data = response.data.data;
 
       jwt.saveToken(data.accessToken);
       jwt.saveExpiredTime(data.expiredTime);
 
-      axios.defaults.headers.common['Authorization'] =  "Bearer " + data.accessToken;
+      axios.defaults.headers.common['Authorization'] = "Bearer " + data.accessToken;
 
       return true;
     } catch (err) {
@@ -43,7 +43,7 @@ export default {
 
   },
   requestUserInfo() {
-    return axios.get(process.env.VUE_APP_OWNER_SERVICE_BASEURL + '/user-service/store-owner');
+    return axios.get( '/user-service/store-owner');
   }
 }
 

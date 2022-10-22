@@ -1,25 +1,20 @@
 <template>
-
   <v-container fluid>
     <v-row>
-
-      <v-col
-          cols="12"
-          sm="6"
-      >
-        <v-card elevation="2" class="rounded-lg" style="border-left: 5px solid #f69653">
+      <v-col cols="12" sm="6">
+        <v-card elevation="3" class="rounded-lg" style="border-top: 1px solid #5f5856">
           <v-card-title primary-title>
             <div>
               <div class="grey--text">{{ salesAmount.title }}</div>
             </div>
             <v-card-text class="d-flex justify-space-between align-center">
-              <h3 class="headline">{{salesAmount.data | currency}}원</h3>
-              <v-avatar size="60"  >
+              <h3 class="text-h4">{{ salesAmount.data | currency }}원</h3>
+              <v-avatar size="60">
                 <v-icon
                     :color="salesAmount.color"
-                    size="64"
+                    size="50"
                 >
-                  mdi-currency-usd
+                  mdi-currency-krw
                 </v-icon>
               </v-avatar>
             </v-card-text>
@@ -31,19 +26,19 @@
           cols="12"
           sm="6"
       >
-        <v-card elevation="2" class="rounded-lg" style="border-left: 5px solid #ed6856">
+        <v-card elevation="3" class="rounded-lg" style="border-top: 1px solid #5f5856">
           <v-card-title primary-title>
             <div>
               <div class="grey--text">{{ bestSellItem.title }}</div>
             </div>
             <v-card-text class="d-flex justify-space-between align-center">
-              <h3 class="headline">{{bestSellItem.data.itemName}} {{ bestSellItem.data.sumCounts }}개</h3>
-              <v-avatar size="60"  >
+              <h3 class="headline">{{ bestSellItem.data.itemName }} {{ bestSellItem.data.sumCounts }}개</h3>
+              <v-avatar size="60">
                 <v-icon
                     :color="bestSellItem.color"
                     size="64"
                 >
-                  mdi-coffee
+                  mdi-coffee-outline
                 </v-icon>
               </v-avatar>
             </v-card-text>
@@ -51,18 +46,17 @@
         </v-card>
       </v-col>
       <v-col cols="12">
-        <v-card  style="border-left: 5px solid #00a8e0">
+        <v-card style="border-top: 1px solid #5f5856" elevation="3">
           <v-card-title>
+            <div class="grey--text">{{ sellAmountAWeeks.title }}</div>
             <v-icon
                 :color="sellAmountAWeeks.color"
-                class="mr-12"
+                class="ml-15 flex justify-end"
                 size="64"
             >
-              mdi-currency-usd
+              mdi-currency-krw
             </v-icon>
-            {{ sellAmountAWeeks.title }}
           </v-card-title>
-
           <v-sheet color="transparent">
             <CustomChart
                 v-if="sellAmountAWeeks.loaded"
@@ -73,67 +67,58 @@
       </v-col>
     </v-row>
   </v-container>
-
 </template>
 
 <script>
-import orderApi from "@/api/order";
+import orderApi from "@/api/orderApi";
 import CustomChart from "@/js/CustomChart";
 
 export default {
   name: "HomeDashBoard",
-  components:{
+  components: {
     CustomChart
   },
   props: ['userInfo'],
   data() {
     return {
       salesAmount: {
-        title: "금일 판매금액",
-        color: "#f69653",
+        title: "오늘의 매출",
+        color: "#5f5856",
         data: {}
       },
       bestSellItem: {
-        title: "주간베스트 판매상품",
-        color: "#ed6856",
+        title: "베스트 세일",
+        color: "#5f5856",
         data: {}
       },
       sellAmountAWeeks: {
-        title: "주간 판매금액 그래프",
-        color: "#00a8e0",
-        loaded:false,
-        options:{
+        title: "주간 판매금액",
+        color: "#5f5856",
+        loaded: false,
+        options: {
           responsive: true,
           maintainAspectRatio: false,
 
-
           scales: {
             xAxes: [{
-              ticks:{
-                fontColor : 'rgba(12, 13, 13, 1)',
-                fontSize : 14
+              ticks: {
+                fontSize: 12
               },
             }],
             yAxes: [{
               ticks: {
-                fontColor : 'rgba(12, 13, 13, 1)',
-                fontSize : 14,
-                userCallback:function (ele) {
+                fontSize: 13,
+                userCallback: function (ele) {
                   return Number(ele).toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,") + "원"
                 }
               },
             }]
           }
-
         },
         data: {
           labels: [],
-          datasets: [
-
-          ]
+          datasets: []
         },
-
-
       },
     }
   },
@@ -143,16 +128,16 @@ export default {
       this.salesAmount.data = response.data.data.salesAmount
       this.bestSellItem.data = response.data.data.bestSellItem
 
-      var saleDataset={
+      var saleDataset = {
         label: '일별 판매 금액',
-        backgroundColor: '#00a8e0',
-        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'grey',
+        borderColor: 'grey',
         fill: false,
         data: [],
       }
       for (const ele of response.data.data.sellAmountAWeeks) {
         this.sellAmountAWeeks.data.labels.push(ele.sellDate)
-        saleDataset.data.push( ele.sellAmount)
+        saleDataset.data.push(ele.sellAmount)
       }
       this.sellAmountAWeeks.data.datasets.push(saleDataset)
 
@@ -160,7 +145,7 @@ export default {
     },
   },
   async mounted() {
-     this.getDashboardData()
+    this.getDashboardData()
 
   }
 }

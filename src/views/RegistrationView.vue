@@ -1,37 +1,39 @@
 <template>
   <div>
     <v-card width="800" class="mx-auto mt-5">
-      <v-card-title>
-        <h1>Register</h1>
+      <v-card-title class="justify-center mb-4">
+        <h1 style="color: grey">Take IT<span style="color: orangered">!</span></h1>
       </v-card-title>
+      <v-card-subtitle>
+        <h2>[점주 가입]</h2>
+      </v-card-subtitle>
       <v-card-text>
-        <h3>회원 정보</h3>
-        <v-form
-            ref="form"
-            lazy-validation
-        >
+        <v-form ref="form" lazy-validation>
           <v-text-field
               v-model="email"
-              :rules="[v => /.+@.+\..+/.test(v) || 'E-mail must be valid', v => !!v || '이메일은 필수 값입니다']"
+              :rules="[v => /.+@.+\..+/.test(v) || '유효한 이메일이 아닙니다.', v => !!v || '이메일은 필수 값입니다']"
               label="이메일"
-          ></v-text-field>
+          />
           <v-text-field
               v-model="password"
-              :rules="[v => !!v || '비밀번호는 필수 값입니다']"
+              :rules="[v => !!v || '비밀번호는 필수 값입니다.']"
               label="비밀번호"
               type="Password"
               append-icon="mdi-eye-off"
-          ></v-text-field>
+          />
           <v-text-field
               v-model="name"
-              :rules="[v => !!v || '이름은 필수 값입니다']"
+              :rules="[
+                  v => !!v || '이름은 필수 값입니다',
+                  v => !/[~!@#$%^&*()_+|<>?:{}\d]/.test(v) || '이름에는 숫자, 특수문자를 사용할 수 없습니다.'
+              ]"
               label="이름"
-          ></v-text-field>
+          />
           <v-text-field
               v-model="phoneNumber"
               :rules="[v => !!v || '전화번호는 필수 값입니다']"
               label="전화번호"
-          ></v-text-field>
+          />
           <v-text-field
               v-model="businessNumber"
               :rules="[v => !!v || '사업자번호는 필수 값입니다']"
@@ -87,7 +89,7 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="info" v-on:click="register">Register</v-btn>
+        <v-btn color="grey" v-on:click="register">Register</v-btn>
       </v-card-actions>
     </v-card>
     <v-dialog
@@ -103,31 +105,24 @@
 </template>
 
 <script>
-import userApi from '../api/user.js'
+import userApi from '../api/userApi.js'
 import {VueDaumPostcode} from 'vue-daum-postcode'
 
 export default {
-  name: "RegisterUser",
+  name: "RegisterUserView",
   components: {
     VueDaumPostcode
   },
-  mounted() {
-    const script = document.createElement("script");
-    // eslint-disable-next-line no-undef
-    script.onload = () => kakao.maps.load(this.initMap);
-    script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=9f2ebb8873879059ae49cdfb3fdd6897&autoload=false&libraries=services";
-    document.head.appendChild(script);
-  },
   data: function () {
     return {
-      email: 'test@gmail.com',
-      password: '1234',
-      name: '테스트 계정',
-      phoneNumber: '010-1234-1234',
-      businessNumber: '03912',
+      email: '',
+      password: '',
+      name: '',
+      phoneNumber: '',
+      businessNumber: '',
 
-      storeName: '테스트 매장',
-      storePhoneNumber: '010-1234-1234',
+      storeName: '',
+      storePhoneNumber: '',
       storeAddress: '',
       zipcode: '',
       latitude: '',
@@ -137,6 +132,13 @@ export default {
 
       map: '',
     }
+  },
+  mounted() {
+    const script = document.createElement("script");
+    // eslint-disable-next-line no-undef
+    script.onload = () => kakao.maps.load(this.initMap);
+    script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=9f2ebb8873879059ae49cdfb3fdd6897&autoload=false&libraries=services";
+    document.head.appendChild(script);
   },
   methods: {
     register: async function () {
@@ -210,7 +212,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

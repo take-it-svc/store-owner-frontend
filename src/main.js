@@ -3,17 +3,51 @@ import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import router from './router';
 import axios from "axios";
-import auth from "./api/auth.js";
-
-axios.defaults.withCredentials = true;
+import auth from "./api/authApi.js";
 
 Vue.config.productionTip = false
+axios.defaults.withCredentials = true;
+
 
 new Vue({
   vuetify,
   router,
   render: h => h(App)
 }).$mount('#app')
+
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401) {
+      let code = error.response.data.code;
+
+      if (code === "EXPIRED") {
+        try {
+          const accessToken = await auth.requestReissue();
+          originalRequest.headers.Authorization = "Bearer " + accessToken;
+          return axios(originalRequest);
+        } catch (reissueError) {
+          window.location.href = "/";
+          alert("권한이 없습니다. 다시 로그인 해주세요.");
+        }
+      }
+
+      window.location.href = "/";
+      alert("권한이 없습니다. 다시 로그인해주세요.");
+    } else {
+      if (error.response.data.message) {
+        alert(error.response.data.message);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 
 Vue.filter('getOrderStatusName', function (orderStatus) {
   switch (orderStatus) {
@@ -35,33 +69,6 @@ Vue.filter('getOrderStatusName', function (orderStatus) {
 });
 
 Vue.filter('currency', function (value) {
-  var num = new Number(value);
+  let num = Number(value);
   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
 });
-
-axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401) {
-      let code = error.response.data.code;
-      if (code === "EXPIRED") {
-        try {
-          const accessToken = await auth.requestReissue();
-          originalRequest.headers.Authorization = "Bearer " + accessToken;
-          return axios(originalRequest);
-        } catch (reissueError) {
-          window.location.href = "/";
-          alert("권한이 없습니다. 다시 로그인 해주세요");
-        }
-       }
-      window.location.href = "/";
-      alert("권한이 없습니다. 다시 로그인해주세요.");
-    } else {
-      if (error.response.data.message) alert(error.response.data.message);
-    }
-    return Promise.reject(error);
-  }
-);

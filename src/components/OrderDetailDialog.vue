@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import orderApi from "../api/order";
+import orderApi from "../api/orderApi";
 
 export default {
   name: "OrderDetailDialog",

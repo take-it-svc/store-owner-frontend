@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import orderApi from '../api/order.js';
+import orderApi from '../api/orderApi.js';
 
 import DatePicker from "@/components/DatePicker";
 import OrderDetailDialog from "@/components/OrderDetailDialog";

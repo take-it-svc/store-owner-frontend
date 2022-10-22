@@ -1,4 +1,4 @@
-const target = process.env.VUE_APP_NGINX_CLUSTER_IP;
+const target = process.env.VUE_APP_OWNER_API_GATEWAY_URL;
 
 module.exports = {
   transpileDependencies: [
